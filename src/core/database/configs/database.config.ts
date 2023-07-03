@@ -1,4 +1,7 @@
-import { IDatabaseConfig } from './interfaces/dbConfig.interface';
+import * as dotenv from 'dotenv';
+import { IDatabaseConfig } from '../interfaces/dbConfig.interface';
+
+dotenv.config();
 
 export const databaseConfig: IDatabaseConfig = {
     development: {
@@ -8,6 +11,7 @@ export const databaseConfig: IDatabaseConfig = {
         host: process.env.DB_HOST,
         port: process.env.DB_PORT,
         dialect: process.env.DB_DIALECT,
+        logging: true,
     },
     test: {
         username: process.env.DB_USER,
@@ -15,6 +19,7 @@ export const databaseConfig: IDatabaseConfig = {
         database: process.env.DB_NAME_TEST,
         host: process.env.DB_HOST,
         port: process.env.DB_PORT,
+        logging: true,
         dialect: process.env.DB_DIALECT,
     },
     production: {
@@ -22,6 +27,7 @@ export const databaseConfig: IDatabaseConfig = {
         password: process.env.DB_PASS,
         database: process.env.DB_NAME_PRODUCTION,
         host: process.env.DB_HOST,
+        logging: true,
         dialect: process.env.DB_DIALECT,
     },
 };

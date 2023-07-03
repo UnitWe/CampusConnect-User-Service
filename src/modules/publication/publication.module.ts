@@ -1,6 +1,6 @@
 import { Module } from '@nestjs/common';
 import { PublicationService } from './services/publication.service';
-import { PublicationController } from './publication.controller';
+import { PublicationController } from './controllers/publication.controller';
 
 @Module({
   providers: [PublicationService],
