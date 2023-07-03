@@ -1,4 +1,10 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Logger } from '@nestjs/common';
 
 @Controller('user')
-export class UserController {}
+export class UserController {
+    logger: Logger
+    
+    constructor(){
+        this.logger = new Logger;
+    }
+}

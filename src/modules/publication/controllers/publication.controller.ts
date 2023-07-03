@@ -1,4 +1,9 @@
-import { Controller } from '@nestjs/common';
+import { Controller, Logger } from '@nestjs/common';
 
 @Controller('publication')
-export class PublicationController {}
+export class PublicationController {
+    logger: Logger
+    constructor(){
+        this.logger = new Logger;
+    }
+}
