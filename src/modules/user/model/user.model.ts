@@ -1,12 +1,11 @@
 import { Column, CreatedAt, DataType, Model, Table, UpdatedAt } from "sequelize-typescript";
 
-@Table
+@Table({ freezeTableName: true })
 export class User extends Model<User> {
     @Column({
-        type: DataType.UUIDV4,
+        type: DataType.UUID,
         primaryKey: true,
         allowNull: false,
-        autoIncrement: true,
     })
     id: string;
 

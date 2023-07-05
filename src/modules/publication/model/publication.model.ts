@@ -1,13 +1,12 @@
 import { BelongsTo, Column, CreatedAt, DataType, ForeignKey, Model, Table, UpdatedAt } from "sequelize-typescript";
-import { User } from "src/modules/user/model/user.model";
+import { User } from "../../user/model/user.model";
 
-@Table
+@Table({ freezeTableName: true })
 export class Publication extends Model<Publication> {
     @Column({
-        type: DataType.UUIDV4,
+        type: DataType.UUID,
         primaryKey: true,
         allowNull: false,
-        autoIncrement: true,
     })
     id: string;
     
@@ -30,7 +29,7 @@ export class Publication extends Model<Publication> {
 
     @ForeignKey(() => User)
     @Column({
-        type: DataType.UUIDV4,
+        type: DataType.UUID,
         allowNull: false,
     })
     user_id: string;
