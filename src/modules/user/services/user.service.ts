@@ -6,4 +6,8 @@ export class UserService {
     constructor(){
         this.logger = new Logger;
     }
+    
+    findAll() {
+        throw new Error('Method not implemented.');
+    }
 }

@@ -72,6 +72,15 @@ Now your environment is ready to start the project.
         </sub>
       </a>
     </td>
+    <td align="center">
+      <a href="https://github.com/vinicius-romariz">
+        <img src="https://avatars.githubusercontent.com/u/138325339?v=4?width=400" 
+        width="100px;" /><br>
+        <sub>
+          <b>Vinicius Romariz</b>
+        </sub>
+      </a>
+    </td>
   </tr>
 </table>
 
