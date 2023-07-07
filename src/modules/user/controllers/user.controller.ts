@@ -65,6 +65,24 @@ export class UserController {
         });
       }
 
+      const userEmailExists = await this.userService.findOneByEmail(email);
+
+      if (userEmailExists) {
+        return res.status(400).send({
+          statusCode: 400,
+          message: 'Este email já se encontra cadastrado!',
+        });
+      }
+
+      const userUsernameExists = await this.userService.findOneByUsername(username);
+
+      if (userUsernameExists) {
+        return res.status(400).send({
+          statusCode: 400,
+          message: 'Este nome de usuário já se encontra cadastrado!',
+        });
+      }
+
       const hashedPassword = await hashPassword(password);
 
       const userData = await this.userService.create({

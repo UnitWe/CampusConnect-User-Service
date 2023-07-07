@@ -11,6 +11,7 @@ import {
 import { NextFunction, Request, Response } from 'express';
 import { PublicationService } from '../services/publication.service';
 import { UserService } from '../../user/services/user.service';
+import { Public } from '../../auth/decorators/auth.decorator';
 
 @Controller('publication')
 export class PublicationController {
@@ -23,6 +24,7 @@ export class PublicationController {
     this.logger = new Logger();
   }
 
+  @Public()
   @Get()
   async show(
     @Req() req: Request,

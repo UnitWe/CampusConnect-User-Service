@@ -31,8 +31,6 @@ export class AuthController {
   ) {
     const userData = await this.userService.findOneByEmail(req.body.email);
     const authData = await this.authService.login(userData);
-
-    console.log(authData);
     
     return res.status(200).send(authData);
   }
