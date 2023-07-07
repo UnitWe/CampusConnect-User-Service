@@ -11,6 +11,7 @@ import {
 import { NextFunction, Request, Response } from 'express';
 import { UserService } from '../services/user.service';
 import { hashPassword } from '../../../utils/common';
+import { Public } from '../../auth/decorators/auth.decorator';
 
 @Controller('user')
 export class UserController {
@@ -20,6 +21,7 @@ export class UserController {
     this.logger = new Logger();
   }
 
+  @Public()
   @Get()
   async show(
     @Req() req: Request,
@@ -46,6 +48,7 @@ export class UserController {
     }
   }
 
+  @Public()
   @Post()
   async create(
     @Req() req: Request,
@@ -80,6 +83,7 @@ export class UserController {
     }
   }
 
+  @Public()
   @Put(':id/update')
   async update(
     @Req() req: Request,
