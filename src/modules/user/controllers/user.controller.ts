@@ -21,7 +21,6 @@ export class UserController {
     this.logger = new Logger();
   }
 
-  @Public()
   @Get()
   async show(
     @Req() req: Request,
@@ -101,7 +100,6 @@ export class UserController {
     }
   }
 
-  @Public()
   @Put(':id/update')
   async update(
     @Req() req: Request,
