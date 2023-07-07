@@ -67,7 +67,7 @@ export class CommentController {
     try {
       const { body, user_id, publication_id } = req.body;
 
-      if (!body || !user_id || publication_id) {
+      if (!body || !user_id || !publication_id) {
         return res.status(400).send({
           statusCode: 400,
           message: 'Corpo da requisição incompleto!',
@@ -92,13 +92,13 @@ export class CommentController {
         });
       }
 
-      const commentData = this.commentService.create({
+      const commentData = await this.commentService.create({
         body,
         user_id,
         publication_id,
       });
 
-      res.status(204).send(commentData);
+      res.status(200).send(commentData);
     } catch (error) {
       this.logger.error({ message: error });
       return res.status(500).send({

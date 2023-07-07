@@ -7,21 +7,24 @@ import {
   CreatedAt,
   UpdatedAt,
   BelongsTo,
+  Default,
+  PrimaryKey,
 } from 'sequelize-typescript';
 import { Publication } from '../../publication/model/publication.model';
 import { User } from '../../user/model/user.model';
 
 @Table({ freezeTableName: true })
 export class Comment extends Model<Comment> {
+  @Default(DataType.UUIDV4)
+  @PrimaryKey
   @Column({
     type: DataType.UUID,
-    primaryKey: true,
     allowNull: false,
   })
   id: string;
 
   @Column({
-    type: DataType.STRING,
+    type: DataType.STRING(300),
     allowNull: false,
   })
   body: string;

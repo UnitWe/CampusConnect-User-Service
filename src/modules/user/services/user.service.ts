@@ -11,7 +11,11 @@ export class UserService {
   }
 
   async findAll(): Promise<User[]> {
-    return await this.userModel.findAll<User>();
+    return await this.userModel.findAll<User>({
+      attributes: {
+        exclude: ["password"]
+      }
+    });
   }
 
   async create(user: UserDto): Promise<User> {

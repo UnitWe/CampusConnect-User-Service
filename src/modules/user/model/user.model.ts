@@ -1,11 +1,13 @@
-import { HasMany, Column, CreatedAt, DataType, Model, Table, UpdatedAt } from "sequelize-typescript";
+import { HasMany, Column, CreatedAt, DataType, Model, Table, UpdatedAt, PrimaryKey, Default } from "sequelize-typescript";
 import { Publication } from "../../publication/model/publication.model";
 
 @Table({ freezeTableName: true })
 export class User extends Model<User> {
+
+    @Default(DataType.UUIDV4)
+    @PrimaryKey
     @Column({
         type: DataType.UUID,
-        primaryKey: true,
         allowNull: false,
     })
     id: string;

@@ -64,7 +64,7 @@ export class UserController {
 
       const hashedPassword = await hashPassword(password);
 
-      const userData = this.userService.create({
+      const userData = await this.userService.create({
         username: username,
         email: email,
         password: hashedPassword,

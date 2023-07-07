@@ -65,14 +65,14 @@ export class PublicationController {
         });
       }
 
-      const publicationData = this.publicationService.create({
+      const publicationData = await this.publicationService.create({
         title,
         sub_title,
         body,
         user_id,
       });
-
-      return res.status(204).send(publicationData);
+      
+      return res.status(200).send(publicationData);
     } catch (error) {
       this.logger.error({ message: error });
       return res.status(500).send({
@@ -86,7 +86,7 @@ export class PublicationController {
   async update(
     @Req() req: Request,
     @Res() res: Response,
-    @Next() nest: NextFunction,
+    @Next() next: NextFunction,
   ) {
     try {
       const publicationId = req.params.id;

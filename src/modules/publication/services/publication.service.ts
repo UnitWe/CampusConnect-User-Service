@@ -2,6 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { PUBLICATION_REPOSITORY } from '../constants';
 import { Publication } from '../model/publication.model';
 import { PublicationDto } from '../dto/publication.dto';
+import { Comment } from '../../comment/model/comment.model';
 
 @Injectable()
 export class PublicationService {
@@ -14,7 +15,15 @@ export class PublicationService {
   }
 
   async findAll(): Promise<Publication[]> {
-    return await this.publicationModel.findAll<Publication>();
+    return await this.publicationModel.findAll<Publication>({
+      include:{
+        model: Comment,
+        as: "comments",
+        attributes: {
+          exclude: ["id", "publication_id"]
+        }
+      }
+    });
   }
 
   async create(publication: PublicationDto): Promise<Publication> {
