@@ -81,6 +81,24 @@ Now your environment is ready to start the project.
         </sub>
       </a>
     </td>
+    <td align="center">
+      <a href="https://github.com/PedroPepeu">
+        <img src="https://avatars.githubusercontent.com/u/75397460?v=4?width=400" 
+        width="100px;" /><br>
+        <sub>
+          <b>Pedro Pepeu</b>
+        </sub>
+      </a>
+    </td>
+      <td align="center">
+      <a href="https://github.com/custafo">
+        <img src="https://avatars.githubusercontent.com/u/101191931?v=4?width=400" 
+        width="100px;" /><br>
+        <sub>
+          <b>Gustavo Pereira</b>
+        </sub>
+      </a>
+    </td>
   </tr>
 </table>
 
