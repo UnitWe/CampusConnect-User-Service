@@ -1,4 +1,5 @@
-import { Column, CreatedAt, DataType, Model, Table, UpdatedAt } from "sequelize-typescript";
+import { HasMany, Column, CreatedAt, DataType, Model, Table, UpdatedAt } from "sequelize-typescript";
+import { Publication } from "../../publication/model/publication.model";
 
 @Table({ freezeTableName: true })
 export class User extends Model<User> {
@@ -41,4 +42,7 @@ export class User extends Model<User> {
 
     @UpdatedAt
     updatedAt?: Date;
+
+    @HasMany(() => Publication, { foreignKey: "user_id" })
+    publication: Publication
 }

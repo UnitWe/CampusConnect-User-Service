@@ -8,7 +8,7 @@ import { userProvider } from './providers/user.provider';
   providers: [
     UserService,
     ...userProvider
-  ]
-
+  ],
+  exports: [UserService]
 })
 export class UserModule {}

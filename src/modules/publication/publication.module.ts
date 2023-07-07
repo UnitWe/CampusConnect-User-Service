@@ -1,10 +1,15 @@
 import { Module } from '@nestjs/common';
 import { PublicationService } from './services/publication.service';
 import { PublicationController } from './controllers/publication.controller';
+import { publicationProvider } from './providers/publication.provider';
+import { UserModule } from '../user/user.module';
 
 @Module({
-  providers: [PublicationService],
-  
-  controllers: [PublicationController]
+  imports:[UserModule],
+  controllers: [PublicationController],
+  providers: [
+    PublicationService,
+    ...publicationProvider
+  ],
 })
 export class PublicationModule {}
