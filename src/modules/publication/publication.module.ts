@@ -11,5 +11,6 @@ import { UserModule } from '../user/user.module';
     PublicationService,
     ...publicationProvider
   ],
+  exports: [PublicationService]
 })
 export class PublicationModule {}
