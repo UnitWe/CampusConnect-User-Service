@@ -1,5 +1,11 @@
+import { User } from "../model/user.model";
+
 export class UserDto{
-    readonly username?: string;
-    readonly password?: string;
-    readonly email?: string;
+    id?: string;
+    active?: boolean;
+    username?: string;
+    password?: string;
+    email?: string;
+    createdAt?: Date;
+    updatedAt?: Date;
 }
