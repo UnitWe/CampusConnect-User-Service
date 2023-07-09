@@ -12,6 +12,7 @@ import { NextFunction, Request, Response } from 'express';
 import { UserService } from '../services/user.service';
 import { hashPassword } from '../../../utils/common';
 import { Public } from '../../auth/decorators/auth.decorator';
+import { UserDto } from '../dto/user.dto';
 
 @Controller('user')
 export class UserController {
@@ -54,50 +55,10 @@ export class UserController {
     @Res() res: Response,
     @Next() next: NextFunction,
   ) {
-    try {
-      const { username, email, password } = req.body;
-
-      if (!username || !email || !password) {
-        return res.status(400).send({
-          statusCode: 400,
-          message: 'Corpo da requisição incompleto!',
-        });
-      }
-
-      const userEmailExists = await this.userService.findOneByEmail(email);
-
-      if (userEmailExists) {
-        return res.status(400).send({
-          statusCode: 400,
-          message: 'Este email já se encontra cadastrado!',
-        });
-      }
-
-      const userUsernameExists = await this.userService.findOneByUsername(username);
-
-      if (userUsernameExists) {
-        return res.status(400).send({
-          statusCode: 400,
-          message: 'Este nome de usuário já se encontra cadastrado!',
-        });
-      }
-
-      const hashedPassword = await hashPassword(password);
-
-      const userData = await this.userService.create({
-        username: username,
-        email: email,
-        password: hashedPassword,
-      });
-
-      return res.status(200).send(userData);
-    } catch (error) {
-      this.logger.error({ message: error });
-      return res.status(500).send({
-        statusCode: 500,
-        message: "Erro interno no servidor",
-      });
-    }
+    const body: UserDto = req.body;
+    
+    const userData = await this.userService.create(body);
+    return res.status(200).send(userData);
   }
 
   @Put(':id/update')
