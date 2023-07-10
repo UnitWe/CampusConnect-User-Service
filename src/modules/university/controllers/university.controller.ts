@@ -10,11 +10,13 @@ import {
 } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
 import { UniversityService } from '../services/university.service';
+import { Public } from '../../../modules/auth/decorators/auth.decorator';
 
 @Controller('university')
 export class UniversityController {
   constructor(private readonly universityService: UniversityService) {}
 
+  @Public()
   @Get()
   async findAll(
     @Req() req: Request,
@@ -23,7 +25,8 @@ export class UniversityController {
   ) {
     return res.status(200).send(await this.universityService.findAll());
   }
-
+  
+  @Public()
   @Get(':id')
   async findOne(
     @Req() req: Request,
@@ -35,6 +38,7 @@ export class UniversityController {
       .send(await this.universityService.findOne({ id: req.params.id }));
   }
 
+  @Public()
   @Post()
   async create(
     @Req() req: Request,

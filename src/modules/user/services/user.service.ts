@@ -2,6 +2,7 @@ import { Inject, Injectable, Logger } from '@nestjs/common';
 import { User } from '../model/user.model';
 import { UserDto } from '../dto/user.dto';
 import { USER_REPOSITORY } from '../constants';
+import { University } from '../../../modules/university/model/university.model';
 
 @Injectable()
 export class UserService {
@@ -14,6 +15,12 @@ export class UserService {
     return await this.userModel.findAll<User>({
       attributes: {
         exclude: ["password"]
+      },
+      include: {
+        model: University,
+        attributes: {
+          exclude: ["createdAt", "updatedAt"]
+        }
       }
     });
   }

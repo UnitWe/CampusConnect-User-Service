@@ -1,4 +1,5 @@
-import { HasMany, Column, CreatedAt, DataType, Model, Table, UpdatedAt, PrimaryKey, Default } from "sequelize-typescript";
+import { HasMany, Column, CreatedAt, DataType, Model, Table, UpdatedAt, PrimaryKey, Default, BelongsTo, ForeignKey } from "sequelize-typescript";
+import { University } from "../../../modules/university/model/university.model";
 
 @Table({ freezeTableName: true })
 export class User extends Model<User> {
@@ -38,9 +39,20 @@ export class User extends Model<User> {
     })
     password: string;
 
+    @ForeignKey(() => University)
+    @Column({
+        type: DataType.UUID,
+        allowNull: false,
+    })
+    university_id: string;
+
+
     @CreatedAt
     createdAt?: Date;
 
     @UpdatedAt
     updatedAt?: Date;
+
+    @BelongsTo(() => University, {foreignKey: "university_id"})
+    university: University 
 }

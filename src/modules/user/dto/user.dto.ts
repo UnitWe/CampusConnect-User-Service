@@ -6,6 +6,7 @@ export class UserDto{
     username?: string;
     password?: string;
     email?: string;
+    university_id?:string;
     createdAt?: Date;
     updatedAt?: Date;
 }

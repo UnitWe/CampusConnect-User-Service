@@ -55,7 +55,7 @@ export class UserController {
     @Next() next: NextFunction,
   ) {
     try {
-      const { username, email, password } = req.body;
+      const { username, email, password, university_id } = req.body;
 
       if (!username || !email || !password) {
         return res.status(400).send({
@@ -88,6 +88,7 @@ export class UserController {
         username: username,
         email: email,
         password: hashedPassword,
+        university_id: university_id
       });
 
       return res.status(200).send(userData);
