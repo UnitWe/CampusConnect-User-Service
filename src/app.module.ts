@@ -5,6 +5,7 @@ import { DatabaseModule } from './core/database/database.module';
 import { LoggerMiddleware } from './utils/middlewares/logger.middleware';
 import { AuthModule } from './modules/auth/auth.module';
 import { S3Module } from './core/aws/s3/s3.module';
+import { UniversityModule } from './modules/university/university.module';
 
 
 @Module({
@@ -12,6 +13,7 @@ import { S3Module } from './core/aws/s3/s3.module';
   UserModule, 
   AuthModule,
   DatabaseModule,
+  UniversityModule,
   S3Module
 ],
   controllers: [],
