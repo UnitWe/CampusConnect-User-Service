@@ -79,7 +79,6 @@ export class User extends Model<User> {
     })
     university_id: string;
 
-
     @CreatedAt
     createdAt?: Date;
 
