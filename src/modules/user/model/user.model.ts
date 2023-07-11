@@ -44,7 +44,7 @@ export class User extends Model<User> {
     @Column({
         type: DataType.ENUM,
         allowNull: false,
-        values: ['Undergraduate', 'Graduate', 'Master', 'Doctor', 'Phd']
+        values: ['Graduando', 'Graduado', 'Mestre', 'Doutor', 'Ph.d']
     })
     academic_level: string;
 
