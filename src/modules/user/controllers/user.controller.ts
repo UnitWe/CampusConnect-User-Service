@@ -36,13 +36,15 @@ export class UserController {
   }
 
   @Public()
-  @Post('/showOneUser')
-  async showOneById(
+  @Post(':username/show')
+  async showOneByUsername(
     @Req() req: Request,
     @Res() res: Response,
     @Next() next: NextFunction,
   ) {
-    const usersData = await this.userService.findOneByUsername(req.body.username);
+    const username: string = req.params.username;
+
+    const usersData = await this.userService.findOneByUsername(username);
     return res.status(200).send(usersData);
   }
 

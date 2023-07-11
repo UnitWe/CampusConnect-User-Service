@@ -155,6 +155,12 @@ export class UserService {
   }
 
   async findOneByUsername(username: string): Promise<User> {
-    return await this.userModel.findOne<User>({ where: { username } });
+    const userData = await this.userModel.findOne<User>({ where: { username }, attributes: { exclude: ["password"] } });
+    
+    if(!userData){
+      throw new NotFoundException('Nenhum usuário com esse apelido foi encontrado!')
+    }
+
+    return userData;
   }
 }
