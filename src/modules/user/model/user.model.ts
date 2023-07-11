@@ -43,14 +43,12 @@ export class User extends Model<User> {
 
     @Column({
         type: DataType.ENUM,
-        allowNull: false,
         values: ['Graduando', 'Graduado', 'Mestre', 'Doutor', 'Ph.d']
     })
     academic_level: string;
 
     @Column({
         type: DataType.INTEGER,
-        allowNull: false,
     })
     year_conclusion: number;
 
@@ -75,7 +73,6 @@ export class User extends Model<User> {
     @ForeignKey(() => University)
     @Column({
         type: DataType.UUID,
-        allowNull: false,
     })
     university_id: string;
 
