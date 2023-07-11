@@ -45,10 +45,7 @@ export class UserService {
     if (
       !user.username ||
       !user.password ||
-      !user.email ||
-      !user.academic_level ||
-      !user.year_conclusion ||
-      !user.university_id
+      !user.email 
     ) {
       throw new BadRequestException(
         `The body of the requisition is not complete!`,

@@ -8,6 +8,8 @@ import {
   Put,
   Req,
   Res,
+  Body,
+  Param
 } from '@nestjs/common';
 import { NextFunction, Request, Response } from 'express';
 import { UserService } from '../services/user.service';
@@ -30,6 +32,17 @@ export class UserController {
     @Next() next: NextFunction,
   ) {
     const usersData = await this.userService.findAll();
+    return res.status(200).send(usersData);
+  }
+
+  @Public()
+  @Post('/showOneUser')
+  async showOneById(
+    @Req() req: Request,
+    @Res() res: Response,
+    @Next() next: NextFunction,
+  ) {
+    const usersData = await this.userService.findOneByUsername(req.body.username);
     return res.status(200).send(usersData);
   }
 
