@@ -5,18 +5,23 @@ import {
   InternalServerErrorException,
   Logger,
   NotFoundException,
+  forwardRef,
 } from '@nestjs/common';
 import { User } from '../model/user.model';
 import { UserDto } from '../dto/user.dto';
 import { USER_REPOSITORY } from '../constants';
 import { checkPassword, hashPassword } from '../../../utils/common';
 import { WhereOptions } from 'sequelize';
+import { S3Service } from '../../../core/aws/s3/services/s3.service';
 import { University } from '../../../modules/university/model/university.model';
 
 @Injectable()
 export class UserService {
   logger: Logger;
-  constructor(@Inject(USER_REPOSITORY) private userModel: typeof User) {
+  constructor(
+    @Inject(USER_REPOSITORY) private userModel: typeof User,
+    @Inject(forwardRef(() => S3Service)) private readonly s3Service: S3Service
+    ) {
     this.logger = new Logger();
   }
 
@@ -154,13 +159,18 @@ export class UserService {
     return await this.userModel.findOne<User>({ where: { email } });
   }
 
-  async findOneByUsername(username: string): Promise<User> {
+  async findOneByUsername(username: string){
     const userData = await this.userModel.findOne<User>({ where: { username }, attributes: { exclude: ["password"] } });
     
     if(!userData){
       throw new NotFoundException('Nenhum usuário com esse apelido foi encontrado!')
     }
 
-    return userData;
+    const picUrl = await this.s3Service.getProfilePicUrl(userData.id)
+    
+    return {
+      ...userData.dataValues,
+      pic_url: picUrl
+    };
   }
 }

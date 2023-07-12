@@ -36,7 +36,7 @@ export class UserController {
   }
 
   @Public()
-  @Post(':username/show')
+  @Get(':username/show')
   async showOneByUsername(
     @Req() req: Request,
     @Res() res: Response,

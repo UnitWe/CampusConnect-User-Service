@@ -70,6 +70,11 @@ export class User extends Model<User> {
     })
     password: string;
 
+    @Column({
+        type: DataType.UUID
+    })
+    picture_bucket_id: string;
+
     @ForeignKey(() => University)
     @Column({
         type: DataType.UUID,
