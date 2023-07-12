@@ -9,6 +9,7 @@ import { JwtStrategy } from './strategies/jwt.strategy';
 import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './guards/jwt-auth.guard';
 import { AuthController } from './controllers/auth.controler';
+import { S3Module } from '../../core/aws/s3/s3.module';
 
 dotenv.config()
 
@@ -19,7 +20,8 @@ dotenv.config()
     JwtModule.register({
       secret: process.env.JWT_SECRET,
       signOptions: { expiresIn: process.env.JWT_EXPIRE}
-    })
+    }),
+    S3Module
   ],
   controllers:[
     AuthController
