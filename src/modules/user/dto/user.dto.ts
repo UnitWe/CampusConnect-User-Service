@@ -7,6 +7,7 @@ export class UserDto{
     academic_level?: string;
     year_conclusion?: number;
     link?: string;
+    picture_bucket_id: string;
     username?: string;
     password?: string;
     email?: string;

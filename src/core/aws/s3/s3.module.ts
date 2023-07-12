@@ -1,11 +1,11 @@
-import { Module } from '@nestjs/common';
+import { Module, forwardRef } from '@nestjs/common';
 import { S3Service } from './services/s3.service';
 import { S3Controller } from './controllers/s3.controller';
-import { UserModule } from '../../../modules/user/user.module';
 import { MulterModule } from '@nestjs/platform-express';
+import { UserModule } from '../../../modules/user/user.module';
 
 @Module({
-  imports: [UserModule, MulterModule],
+  imports: [MulterModule, forwardRef(() => UserModule)],
   providers: [S3Service],
   controllers: [S3Controller],
   exports: [S3Service]
