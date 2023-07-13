@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { Inject, Injectable, forwardRef } from "@nestjs/common";
 import { UserService } from "../../user/services/user.service";
 import { checkPassword } from "../../../utils/common"
 import { User } from "../../user/model/user.model";
@@ -8,7 +8,7 @@ import { S3Service } from "../../../core/aws/s3/services/s3.service";
 @Injectable()
 export class AuthService{
     constructor(
-        private readonly userService: UserService,
+        @Inject(forwardRef(() => UserService)) private readonly userService: UserService,
         private readonly jwtService: JwtService,
         private readonly s3Service: S3Service
         ){}

@@ -59,10 +59,7 @@ export class UserController {
 
     const userData = await this.userService.create(body);
 
-    return res.status(201).send({
-      statusCode: 200,
-      message: 'Usuário cadastrado com sucesso!',
-    });
+    return res.status(201).send(userData);
   }
 
   @Put(':id/update')

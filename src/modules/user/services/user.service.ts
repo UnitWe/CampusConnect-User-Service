@@ -14,13 +14,15 @@ import { checkPassword, hashPassword } from '../../../utils/common';
 import { WhereOptions } from 'sequelize';
 import { S3Service } from '../../../core/aws/s3/services/s3.service';
 import { University } from '../../../modules/university/model/university.model';
+import { AuthService } from '../../../modules/auth/services/auth.service';
 
 @Injectable()
 export class UserService {
   logger: Logger;
   constructor(
     @Inject(USER_REPOSITORY) private userModel: typeof User,
-    @Inject(forwardRef(() => S3Service)) private readonly s3Service: S3Service
+    @Inject(forwardRef(() => S3Service)) private readonly s3Service: S3Service,
+    @Inject(forwardRef(() => AuthService)) private readonly authService: AuthService
     ) {
     this.logger = new Logger();
   }
@@ -46,7 +48,7 @@ export class UserService {
     return userData;
   }
 
-  async create(user: UserDto): Promise<User> {
+  async create(user: UserDto): Promise<{}> {
     if (
       !user.username ||
       !user.password ||
@@ -76,7 +78,8 @@ export class UserService {
     const hashedPassword = await hashPassword(user.password);
 
     try {
-      return await this.userModel.create<User>({
+
+      const userData = await this.userModel.create<User>({
         name: user.name,
         biograph: user.biograph,
         graduation_course: user.graduation_course,
@@ -88,6 +91,14 @@ export class UserService {
         password: hashedPassword,
         email: user.email,
       });
+
+      const token = await this.authService.login(userData)
+
+      return {
+        ...userData.dataValues,
+        access_token: token.access_token
+      }
+
     } catch (error) {
       this.logger.error(error);
       throw new InternalServerErrorException(
