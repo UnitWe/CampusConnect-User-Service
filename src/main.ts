@@ -10,6 +10,6 @@ async function bootstrap() {
   app.useBodyParser("json")
   app.enableCors()
   app.setGlobalPrefix("api/v1");
-  await app.listen(process.env.PORT || 5000);
+  await app.listen();
 }
 bootstrap();
