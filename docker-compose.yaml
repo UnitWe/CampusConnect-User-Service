@@ -1,0 +1,35 @@
+version: '3'
+
+services:
+
+  app:
+    build: .
+    entrypoint: ./.docker/entrypoint.sh
+    container_name: campusconnect-user-service
+    ports:
+      - 3000:3000
+    volumes:
+      - .:/home/node/app
+    env_file:
+      - ./.env
+    extra_hosts:
+      - "host.docker.internal:172.17.0.1"
+  
+  db:
+    build: .docker/postgres
+    restart: always
+    tty: true
+    volumes:
+      - .docker/dbdata:/var/lib/postgresql/data
+    env_file:
+      - ./.env
+
+  pgadmin:
+    image: dpage/pgadmin4
+    tty: true
+    env_file:
+      - ./.env
+    ports:
+      - "9000:80"
+    depends_on:
+      - db
