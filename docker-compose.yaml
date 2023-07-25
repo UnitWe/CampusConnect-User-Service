@@ -6,8 +6,6 @@ services:
     build: .
     entrypoint: ./.docker/entrypoint.sh
     container_name: campusconnect-user-service
-    ports:
-      - ${PORT}:${PORT}
     volumes:
       - .:/home/node/app
     env_file:
