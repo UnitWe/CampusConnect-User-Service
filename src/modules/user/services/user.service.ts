@@ -1,7 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { User } from '../model/user.model';
+import { UserCreateDto } from '../dto/user-create.dto';
 import { checkPassword, hashPassword } from '../../../utils/common';
-import { University } from '../../../modules/university/model/university.model';
 
 @Injectable()
 export class UserService {
@@ -13,7 +12,7 @@ export class UserService {
 
   }
 
-  async create(user){
+  async create(user: UserCreateDto){
 
   }
 
@@ -21,12 +20,7 @@ export class UserService {
 
   }
 
-  async updatePassword(
-    userId: string,
-    oldPassword: string,
-    newPassword: string,
-  ) {
-
+  async updatePassword() {
   }
 
   async findOneById(id: string){

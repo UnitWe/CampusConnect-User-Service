@@ -3,7 +3,7 @@ version: '3'
 services:
 
   app:
-    build: .
+    build: ./Dockerfile
     entrypoint: ./.docker/entrypoint.sh
     container_name: campusconnect-user-service
     volumes:
@@ -17,6 +17,8 @@ services:
     build: .docker/postgres
     restart: always
     tty: true
+    ports:
+      - "5432:5432"
     volumes:
       - .docker/dbdata:/var/lib/postgresql/data
     env_file:

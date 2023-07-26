@@ -1,21 +1,35 @@
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { UserModule } from './modules/user/user.module';
-import { LoggerMiddleware } from './utils/middlewares/logger.middleware';
-
+import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { UniversityModule } from './modules/university/university.module';
-
+import { PrismaModule } from './modules/prisma/prisma.module';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
-  imports: [ConfigModule.forRoot({ isGlobal: true }),
-  UserModule, 
-  UniversityModule,
-],
+  imports: [
+    ConfigModule.forRoot({ isGlobal: true }),
+    UserModule,
+    UniversityModule,
+    ClientsModule.register([
+      {
+        name: 'USERS_SERVICE',
+        transport: Transport.KAFKA,
+        options: {
+          client: {
+            clientId: 'users',
+            brokers: ['host.docker.internal:9094'],
+          },
+        },
+      },
+    ]),
+    PrismaModule,
+  ],
   controllers: [],
   providers: [],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
-    consumer.apply(LoggerMiddleware).forRoutes("*");
+    consumer.apply(LoggerMiddleware).forRoutes('*');
   }
- }
+}

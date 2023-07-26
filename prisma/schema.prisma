@@ -1,0 +1,45 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id                String        @id @default(uuid())
+  active            Boolean       @default(true)
+  username          String        @unique
+  name              String?
+  biograph          String?
+  graduation_course String?
+  academic_level    AcademicLevel?
+  year_conclusion   Int?
+  link              String?
+  email             String        @unique
+  password          String
+  university        University?   @relation(fields: [university_id], references: [id])
+  university_id     String?       @default(uuid())
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt @default(now())
+}
+
+model University {
+  id           String   @id @default(uuid())
+  active       Boolean  @default(true)
+  name         String   @unique
+  abbreviation String   @unique
+  cnpj         String   @unique
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt @default(now())
+  users         User[]
+}
+
+enum AcademicLevel {
+  Graduando
+  Graduado
+  Mestre
+  Doutor
+  Phd
+}

@@ -1,6 +1,6 @@
-FROM node:20-slim
+FROM node:19-slim
 
-RUN apt-get update && apt-get install -y bash
+RUN apt-get update -y && apt-get install -y openssl
 
 RUN npm i -g @nestjs/cli@7.4.1
 
