@@ -1,15 +1,25 @@
 import * as dotenv from 'dotenv';
 import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
-import { NestExpressApplication } from '@nestjs/platform-express';
+import { MicroserviceOptions, Transport } from '@nestjs/microservices';
+import { ValidationPipe } from '@nestjs/common';
 
 dotenv.config();
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
-  app.useBodyParser("json")
-  app.enableCors()
-  app.setGlobalPrefix("api/v1");
-  await app.listen(process.env.PORT || 5000);
+  const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
+    transport: Transport.KAFKA,
+    options: {
+      client: {
+        brokers: ['host.docker.internal:9094'],
+      },
+      consumer: {
+        groupId: 'users-consumer',
+      },
+    },
+  });
+  app.useGlobalPipes(new ValidationPipe());
+  await app.listen();
 }
+
 bootstrap();
