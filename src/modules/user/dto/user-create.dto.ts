@@ -1,9 +1,10 @@
+import { AcademicLevel } from '@prisma/client';
 import {
-  IsAlphanumeric,
   IsEmail,
   IsIn,
   IsNotEmpty,
   IsNumber,
+  IsOptional,
   IsString,
   IsUrl,
   MaxLength,
@@ -15,25 +16,31 @@ export class UserCreateDto {
   @IsNotEmpty()
   username: string;
 
+  @IsOptional()
   @IsString()
-  name: string;
+  name?: string;
 
+  @IsOptional()
   @IsString()
-  biograph: string;
+  biograph?: string;
 
+  @IsOptional()
   @IsString()
-  graduation_course: string;
+  graduation_course?: string;
 
+  @IsOptional()
   @IsIn(['Graduando', 'Graduado', 'Mestre', 'Doutor', 'Phd'])
   @IsString()
-  academic_level: string;
+  academic_level?: AcademicLevel;
 
+  @IsOptional()
   @IsNumber()
-  year_conclusion: number;
+  year_conclusion?: number;
 
+  @IsOptional()
   @IsUrl()
   @IsString()
-  link: string;
+  link?: string;
 
   @IsEmail()
   @IsString()
@@ -44,6 +51,7 @@ export class UserCreateDto {
   @IsNotEmpty()
   password: string;
 
+  @IsOptional()
   @IsString()
-  university_id: string;
+  university_id?: never;
 }

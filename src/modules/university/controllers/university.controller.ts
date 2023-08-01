@@ -5,14 +5,9 @@ import { UniversityService } from '../services/university.service';
 export class UniversityController {
   constructor(private readonly universityService: UniversityService) {}
 
-  @Get()
   async findAll() {}
 
-  @Get(':id')
-  async findOne() {
-    
-  }
+  async findOne() {}
 
-  @Post()
   async create() {}
 }

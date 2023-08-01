@@ -2,4 +2,4 @@
 
 npm install
 npx prisma generate
-npm run dev
+tail -f /dev/null

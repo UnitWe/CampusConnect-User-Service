@@ -1,11 +1,11 @@
-FROM node:19-slim
+FROM node:20-slim
 
-RUN apt-get update -y && apt-get install -y openssl
+RUN apt-get -y update
+RUN apt-get -y install build-essential
+RUN apt-get -y install curl
 
 RUN npm i -g @nestjs/cli@7.4.1
 
-USER node
-
 CMD ["tail", "-f", "/dev/null"]
 
-WORKDIR /home/node/app
+WORKDIR /app

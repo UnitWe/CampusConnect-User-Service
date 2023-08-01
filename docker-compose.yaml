@@ -3,15 +3,16 @@ version: '3'
 services:
 
   app:
-    build: ./Dockerfile
+    build: .
     entrypoint: ./.docker/entrypoint.sh
     container_name: campusconnect-user-service
     volumes:
-      - .:/home/node/app
+      - .:/app
     env_file:
       - ./.env
     extra_hosts:
       - "host.docker.internal:172.17.0.1"
+      - "localhost:172.17.0.1"
   
   db:
     build: .docker/postgres
@@ -22,7 +23,7 @@ services:
     volumes:
       - .docker/dbdata:/var/lib/postgresql/data
     env_file:
-      - ./.env
+      - ./.env      
 
   pgadmin:
     image: dpage/pgadmin4

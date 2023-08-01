@@ -7,9 +7,7 @@ import { ValidationPipe } from '@nestjs/common';
 dotenv.config();
 
 async function bootstrap() {
-  const app = await NestFactory.create(AppModule);
-
-  app.connectMicroservice<MicroserviceOptions>({
+  const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
     transport: Transport.KAFKA,
     options: {
       client: {
@@ -20,11 +18,8 @@ async function bootstrap() {
       },
     },
   });
-
   app.useGlobalPipes(new ValidationPipe());
-
-  await app.startAllMicroservices();
-  await app.listen(5000);
+  await app.listen();
 }
 
 bootstrap();

@@ -1,27 +1,26 @@
 import { Controller,Get, Patch, Post, Put } from '@nestjs/common';
 import { UserService } from '../services/user.service';
+import { EventPattern, Payload } from '@nestjs/microservices';
+import { UserCreateDto } from '../dto/user-create.dto';
 
-@Controller('user')
+@Controller()
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  @Get()
   async show() {
   }
 
-  @Get()
   async showOneByUsername() {
   }
 
-  @Post()
-  async create() {
+  @EventPattern('user_create')
+  async handleUserCreate(@Payload() userData: UserCreateDto) {
+    this.userService.create(userData);
   }
 
-  @Put(':id/update')
   async update() {
   }
 
-  @Patch(':id/update/password')
   async updatePassword() {
 
   }
