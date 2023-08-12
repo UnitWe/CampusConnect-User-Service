@@ -9,8 +9,10 @@ import {
   IsUrl,
   MaxLength,
 } from 'class-validator';
+import { RecordAlreadyExists } from '../../../modules/decorators/record-already-exists.decorator';
 
 export class UserCreateDto {
+  @RecordAlreadyExists("user", { message: "Este apelido já existe nos registros!" })
   @MaxLength(30)
   @IsString()
   @IsNotEmpty()
@@ -42,6 +44,7 @@ export class UserCreateDto {
   @IsString()
   link?: string;
 
+  @RecordAlreadyExists("user", { message: "Este Email já existe nos registros!" })
   @IsEmail()
   @IsString()
   @IsNotEmpty()

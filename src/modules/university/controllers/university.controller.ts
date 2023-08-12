@@ -1,13 +1,23 @@
-import { Controller, Get, Post } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { UniversityService } from '../services/university.service';
+import { UniversityCreateDto } from '../dto/university-create.dto';
 
 @Controller('university')
 export class UniversityController {
   constructor(private readonly universityService: UniversityService) {}
 
-  async findAll() {}
+  @Get()
+  async findAll() {
+    return await this.universityService.findAll();
+  }
 
-  async findOne() {}
+  @Get(':id')
+  async findOne(@Param('id') id: string) {
+    return await this.universityService.findOne(id);
+  }
 
-  async create() {}
+  @Post()
+  async create(@Body() universityCreateData: UniversityCreateDto) {
+    return await this.universityService.create(universityCreateData);
+  }
 }

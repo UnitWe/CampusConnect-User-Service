@@ -1,27 +1,39 @@
-import { Controller,Get, Patch, Post, Put } from '@nestjs/common';
+import { Body, Controller,Get, HttpException, Param, Patch, Post, Put } from '@nestjs/common';
 import { UserService } from '../services/user.service';
 import { EventPattern, Payload } from '@nestjs/microservices';
 import { UserCreateDto } from '../dto/user-create.dto';
+import { UserUpdateDto } from '../dto/user-update.dto';
+import { UserCreateResponseDto } from '../dto/user-create-response.dto';
+import { UserUpdatePasswordDto } from '../dto/user-update-password.dto';
 
-@Controller()
+@Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  async show() {
+  @Get()
+  async showAll() {
+    return await this.userService.findAll()
   }
 
-  async showOneByUsername() {
+  @Get(":username")
+  async showOneByUsername(@Param("username") username: string) {
+    return await this.userService.findOneByUsername(username)
   }
 
-  @EventPattern('user_create')
-  async handleUserCreate(@Payload() userData: UserCreateDto) {
-    this.userService.create(userData);
+  @Post()
+  async create(@Body() userData: UserCreateDto): Promise<UserCreateResponseDto> {
+    return await this.userService.create(userData);
   }
 
-  async update() {
+  @Put(":id")
+  async update(@Param("id") id: string, @Body() userUpdateData: UserUpdateDto){
+    await this.userService.update(id, userUpdateData)
+    return {status: 200, message: "Usuário atualizado com sucesso!"}
   }
 
-  async updatePassword() {
-
+  @Patch(":id/password")
+  async updatePassword(@Param("id") id: string, @Body() userUpdatePasswordData: UserUpdatePasswordDto) {
+    await this.userService.updatePassword(id, userUpdatePasswordData)
+    return {status: 200, message: "Senha atualizada com sucesso!"}
   }
 }

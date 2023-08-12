@@ -3,11 +3,15 @@ import { NestFactory } from '@nestjs/core';
 import { AppModule } from './app.module';
 import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { ValidationPipe } from '@nestjs/common';
+import { useContainer } from 'class-validator';
+import { PrismaNotFoundExceptionFilter } from './modules/exception-filter/prisma-not-found.exception-filter';
 
 dotenv.config();
 
 async function bootstrap() {
-  const app = await NestFactory.createMicroservice<MicroserviceOptions>(AppModule, {
+  const app = await NestFactory.create(AppModule)
+  
+  app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.KAFKA,
     options: {
       client: {
@@ -18,8 +22,17 @@ async function bootstrap() {
       },
     },
   });
-  app.useGlobalPipes(new ValidationPipe());
-  await app.listen();
+
+  app.setGlobalPrefix("api")
+  app.useGlobalPipes(new ValidationPipe({
+    errorHttpStatusCode: 422,
+  }))
+
+  useContainer(app.select(AppModule), { fallbackOnErrors: true });
+  app.useGlobalFilters(new PrismaNotFoundExceptionFilter());
+
+  await app.startAllMicroservices();
+  await app.listen(process.env.PORT);
 }
 
 bootstrap();
