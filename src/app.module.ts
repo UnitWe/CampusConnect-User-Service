@@ -4,8 +4,8 @@ import { UserModule } from './modules/user/user.module';
 import { LoggerMiddleware } from './middlewares/logger.middleware';
 import { UniversityModule } from './modules/university/university.module';
 import { PrismaModule } from './modules/prisma/prisma.module';
-import { ClientsModule, Transport } from '@nestjs/microservices';
 import { ClientModule } from './modules/client/client.module';
+import { AuthModule } from './modules/auth/auth.module';
 
 @Module({
   imports: [
@@ -14,6 +14,7 @@ import { ClientModule } from './modules/client/client.module';
     UniversityModule,
     PrismaModule,
     ClientModule,
+    AuthModule
   ],
   controllers: [],
   providers: [],
