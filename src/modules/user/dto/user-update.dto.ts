@@ -11,7 +11,7 @@ import {
     MaxLength,
   } from 'class-validator';
 import { AcademicLevel } from '@prisma/client';
-import { RecordExists } from '../../../modules/decorators/record-exists.decorator';
+import { RecordExists } from '../../../decorators/record-exists.decorator';
 
 export class UserUpdateDto extends PartialType(UserCreateDto) {
     @IsOptional()

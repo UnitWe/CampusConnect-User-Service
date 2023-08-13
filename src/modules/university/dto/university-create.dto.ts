@@ -1,5 +1,5 @@
 import { IsNotEmpty, IsString } from "class-validator"
-import { RecordAlreadyExists } from "../../../modules/decorators/record-already-exists.decorator"
+import { RecordAlreadyExists } from "../../../decorators/record-already-exists.decorator"
 
 export class UniversityCreateDto {
     @RecordAlreadyExists("university")

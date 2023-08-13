@@ -1,18 +1,29 @@
-import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
+import {
+  Inject,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { UserCreateDto } from '../dto/user-create.dto';
 import { checkPassword, hashPassword } from '../../../utils/common';
 import { PrismaService } from '../../../modules/prisma/services/prisma.service';
 import { UserUpdateDto } from '../dto/user-update.dto';
 import { UserCreateResponseDto } from '../dto/user-create-response.dto';
 import { UserUpdatePasswordDto } from '../dto/user-update-password.dto';
+import { ClientKafka } from '@nestjs/microservices';
+import { lastValueFrom } from 'rxjs';
 
 @Injectable()
 export class UserService {
-  constructor(private prismaService: PrismaService) {}
+  constructor(
+    private prismaService: PrismaService,
+    @Inject('USERS_SERVICE')
+    private kafkaClient: ClientKafka,
+  ) {}
 
   async findAll() {
     const usersData = await this.prismaService.user.findMany({
-      select:{
+      select: {
         id: true,
         active: true,
         username: true,
@@ -26,61 +37,77 @@ export class UserService {
         university_id: true,
         createdAt: true,
         updatedAt: true,
-      }      
-    })
-    
-    return usersData
+      },
+    });
+
+    return usersData;
   }
-  
+
   async findOneById(id: string) {
-    const userData = await this.prismaService.user.findUnique({ where:{ id }, include: { university: true } })
+    const userData = await this.prismaService.user.findUnique({
+      where: { id },
+      include: { university: true },
+    });
 
-    if(!userData)
-      throw new NotFoundException(`Não foi possível encontrar um usuário com este id!`)
+    if (!userData)
+      throw new NotFoundException(
+        `Não foi possível encontrar um usuário com este id!`,
+      );
 
-    const {password, ...result} = userData;
+    const { password, ...result } = userData;
 
-    return result
+    return result;
   }
 
   async findOneByEmail(email: string) {
-    const userData = await this.prismaService.user.findUnique({ where:{ email },include: { university: true } })
+    const userData = await this.prismaService.user.findUnique({
+      where: { email },
+      include: { university: true },
+    });
 
-    if(!userData)
-      throw new NotFoundException(`Não foi possível encontrar um usuário com o email ${email}!`)
+    if (!userData)
+      throw new NotFoundException(
+        `Não foi possível encontrar um usuário com o email ${email}!`,
+      );
 
-    const {password, ...result} = userData;
+    const { password, ...result } = userData;
 
-    return result
+    return result;
   }
 
   async findOneByUsername(username: string) {
-    const userData = await this.prismaService.user.findUnique({ where:{ username }, include: { university: true } })
+    const userData = await this.prismaService.user.findUnique({
+      where: { username },
+      include: { university: true },
+    });
 
-    if(!userData)
-      throw new NotFoundException(`Não foi possível encontrar um usuário com o apelido ${username}!`)
+    if (!userData)
+      throw new NotFoundException(
+        `Não foi possível encontrar um usuário com o apelido ${username}!`,
+      );
 
-    const {password, ...result} = userData;
+    const { password, ...result } = userData;
 
-    return result
+    return result;
   }
 
-  async create(user: UserCreateDto): Promise<UserCreateResponseDto>{
-    const unhashedPasword = user.password
-    delete user.password
+  async create(user: UserCreateDto): Promise<UserCreateResponseDto> {
+    const unhashedPasword = user.password;
+    delete user.password;
 
     const hashedPassword = await hashPassword(unhashedPasword);
 
     const userData = await this.prismaService.user.create({
       data: {
         ...user,
-        password: hashedPassword
+        password: hashedPassword,
       },
     });
 
-    const { password, ...result } = userData
+    const { password, ...result } = userData;
 
-    return result
+    await lastValueFrom(this.kafkaClient.emit('user_created', result))
+    return result;
   }
 
   async update(id: string, user: UserUpdateDto) {
@@ -89,26 +116,44 @@ export class UserService {
       data: user,
     });
 
-    if(!userData)
-      throw new NotFoundException(`Não foi possível encontrar um usuário com este id!`)
+    if (!userData)
+      throw new NotFoundException(
+        `Não foi possível encontrar um usuário com este id!`,
+      );
 
-    return
+    return;
   }
 
+  async updatePassword(
+    id: string,
+    userUpdatePasswordData: UserUpdatePasswordDto,
+  ) {
+    const userData = await this.prismaService.user.findUnique({
+      where: { id },
+    });
 
-  async updatePassword(id: string, userUpdatePasswordData: UserUpdatePasswordDto) {    
-    const userData = await this.prismaService.user.findUnique({ where:{ id } })    
+    if (!userData)
+      throw new NotFoundException(
+        `Não foi possível encontrar um usuário com este id!`,
+      );
 
-    if(!userData)
-      throw new NotFoundException(`Não foi possível encontrar um usuário com este id!`)
-    
-    if(!await checkPassword(userUpdatePasswordData.old_password, userData.password))
-      throw new UnauthorizedException(`Senha inserida inválida!`)
+    if (
+      !(await checkPassword(
+        userUpdatePasswordData.old_password,
+        userData.password,
+      ))
+    )
+      throw new UnauthorizedException(`Senha inserida inválida!`);
 
-    const updatedPasswordHashed = await hashPassword(userUpdatePasswordData.new_password)
-    
-    await this.prismaService.user.update({where: { id }, data: { password: updatedPasswordHashed }})
+    const updatedPasswordHashed = await hashPassword(
+      userUpdatePasswordData.new_password,
+    );
 
-    return
+    await this.prismaService.user.update({
+      where: { id },
+      data: { password: updatedPasswordHashed },
+    });
+
+    return;
   }
 }
