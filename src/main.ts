@@ -10,7 +10,7 @@ dotenv.config();
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule)
-  
+
   app.connectMicroservice<MicroserviceOptions>({
     transport: Transport.KAFKA,
     options: {
@@ -27,6 +27,8 @@ async function bootstrap() {
   app.useGlobalPipes(new ValidationPipe({
     errorHttpStatusCode: 422,
   }))
+
+  app.enableCors()
 
   useContainer(app.select(AppModule), { fallbackOnErrors: true });
   app.useGlobalFilters(new PrismaNotFoundExceptionFilter());

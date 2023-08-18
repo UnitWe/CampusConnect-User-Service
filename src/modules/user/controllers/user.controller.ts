@@ -5,21 +5,25 @@ import { UserCreateDto } from '../dto/user-create.dto';
 import { UserUpdateDto } from '../dto/user-update.dto';
 import { UserCreateResponseDto } from '../dto/user-create-response.dto';
 import { UserUpdatePasswordDto } from '../dto/user-update-password.dto';
+import { Public } from '../../../decorators/auth.decorator';
 
 @Controller('users')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
+  @Public()
   @Get()
   async showAll() {
     return await this.userService.findAll()
   }
 
+  @Public()
   @Get(":username")
   async showOneByUsername(@Param("username") username: string) {
     return await this.userService.findOneByUsername(username)
   }
 
+  @Public()
   @Post()
   async create(@Body() userData: UserCreateDto): Promise<UserCreateResponseDto> {
     return await this.userService.create(userData);
